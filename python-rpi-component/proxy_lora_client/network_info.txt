@@ -1,0 +1,21 @@
+[
+  {
+  "name": "ttn",
+  "info": {
+      "host": "eu.thethings.network",
+      "port": 1883,
+      "app_id": "new_test_namur",
+      "username": "new_test_namur",
+      "password": "ttn-account-v2.CpdLQWQM6lWj-ulPiHEdareo4D34clQ1rpUSQzfdau0"
+      }
+  },
+
+  {
+  "name": "loraserver",
+  "info": {
+      "host": "138.48.33.164",
+      "port": 1883,
+      "app_id": "1"
+      }
+  }
+]

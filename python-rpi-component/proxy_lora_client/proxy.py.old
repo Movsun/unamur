@@ -1,0 +1,93 @@
+import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
+import time
+import json
+
+fileName = 'database.txt'
+f = open(fileName, mode='r')
+hosts = json.loads(f.read())
+f.close()
+
+def on_message(mosq, obj, msg):
+    try:
+        print('publishing...')
+        print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+        publish.single(topic=msg.topic, payload=msg.payload, hostname="localhost")
+    except Exception as e:
+        print('could not publish message with exception: ', e)
+
+while True:
+    print('a: add network')
+    print('d: delete network')
+    print('l: list networks')
+    print('r: run program')
+    print('e: exit')
+    c = raw_input('input command: ')
+    if c is 'a':
+        host = dict()
+        host['host'] = raw_input('enter hostname: ')
+        port = input('enter port number: ')
+        host['port'] = int(port)
+        username = raw_input('enter username: ')
+        if username is not '':
+            host['username'] = username
+            password = raw_input('enter password: ')
+            if password is not '':
+                host['password'] = password
+        topics = []
+        topic = raw_input('enter topic: ')
+        while topic is not '':
+            topics.append(topic)
+            topic = raw_input('enter topic: ')
+        if len(topics) < 1:
+            topics.append('#')
+        host['topics'] = topics
+        hosts.append(host)
+        f = open(fileName, 'w')
+        f.write(json.dumps(hosts))
+        f.close()
+    if c is 'd':
+        i = 0
+        for host in hosts:
+            print (i, ' - ', host['host'])
+            i = i + 1
+        h = raw_input('enter host index to delete: ')
+        if h is not '':
+            confirm = raw_input('are you sure? n/y: ')
+            if confirm is 'y':
+                hosts.pop(int(h))
+                f = open(fileName, 'w')
+                f.write(json.dumps(hosts))
+                f.close()
+    if c is 'l':
+        print('------------------------------------')
+        for host in hosts:
+            print('host: ', host['host'])
+            print('port: ', host['port'])
+            if 'username' in host:
+                print('username: ', host['username'])
+                print('password: ', host['password'])
+            print('topics: ', host['topics'])
+            print('------------------------------------')
+        raw_input('enter to continue')
+    if c is 'r':
+        for host in hosts:
+            mqttc = mqtt.Client()
+            if 'username' in host and 'password' in host:
+                mqttc.username_pw_set(username=host['username'], password=host['password'])
+            mqttc.on_message = on_message
+            try:
+                print('connecting to: ', host['host'], ' on port: ', host['port'])
+                mqttc.connect(host['host'], host['port'])
+                for topic in host['topics']:
+                    mqttc.subscribe(topic)
+                mqttc.loop_start()
+            except Exception as e:
+                print('fail to connect to: ', host['host'], ' on port: ', host['port'])
+                print('exception: ', e)
+                pass
+        while True:
+            print('waiting for subscribed message...')
+            time.sleep(10)
+    if c is 'e':
+        break

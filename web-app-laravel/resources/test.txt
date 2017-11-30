@@ -1,0 +1,1 @@
+{"confirmed":false,"data":"MQ==","devEUI":"70b3d5499c2163d2","fPort":2,"reference":""}

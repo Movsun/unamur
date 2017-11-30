@@ -1,0 +1,32 @@
+{
+    "ttn": {
+              "uplink": {
+                  "topic": "+/devices/+/up",
+                  "message": {
+                    "value": "payload_raw",
+                    "gateways": "gtw_id",
+                    "device_eui": "hardware_serial",
+                    "device_id": "dev_id"
+                  }
+              },
+              "downlink": {
+                  "topic": "<app_id>/devices/<dev_id>/down",
+                  "message": "{\"port\": <port>, \"confirmed\": <confirmed>, \"payload_raw\": \"<payload>\" }"
+              }
+            },
+    "loraserver": {
+                  "uplink": {
+                      "topic": "application/+/node/+/rx",
+                      "message": {
+                        "value": "data",
+                        "gateways": "mac",
+                        "device_eui": "devEUI",
+                        "device_id": "nodeName"
+                      }
+                    },
+                   "downlink": {
+                       "topic": "application/<app_id>/node/<dev_eui>/tx",
+                       "message": "{\"fPort\": <port>, \"confirmed\": <confirmed>, \"data\": \"<payload>\" }"
+                   }
+                  }
+}

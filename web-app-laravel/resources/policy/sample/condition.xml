@@ -1,0 +1,6 @@
+<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:{function1}">
+   <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:{function2}">
+	 <EnvironmentAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:environment:{name}" DataType="http://www.w3.org/2001/XMLSchema#{type}"/>
+   </Apply>
+   <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#{type}">{value}</AttributeValue>
+</Apply>
